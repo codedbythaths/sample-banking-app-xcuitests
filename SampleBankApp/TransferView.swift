@@ -40,6 +40,8 @@ struct TransferView: View {
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .accessibilityIdentifier("transfer.from.label")
+                                .accessibilityLabel("From account")
+                                .accessibilityHint("Select the account to transfer money from")
                             
                             Button(action: { showFromAccountSelection = true }) {
                                 if let account = selectedFromAccount {
@@ -103,6 +105,8 @@ struct TransferView: View {
                                 }
                             }
                             .accessibilityIdentifier("transfer.from.account.button")
+                            .accessibilityLabel("From account selection")
+                            .accessibilityHint("Tap to select the account to transfer money from")
                         }
                         
                         // To Account
@@ -111,6 +115,8 @@ struct TransferView: View {
                                 .font(.headline)
                                 .foregroundColor(.white)
                                 .accessibilityIdentifier("transfer.to.label")
+                                .accessibilityLabel("To account")
+                                .accessibilityHint("Select the account to transfer money to")
                             
                             Button(action: { showToAccountSelection = true }) {
                                 if let account = selectedToAccount {
@@ -170,6 +176,8 @@ struct TransferView: View {
                                 }
                             }
                             .accessibilityIdentifier("transfer.to.account.button")
+                            .accessibilityLabel("To account selection")
+                            .accessibilityHint("Tap to select the account to transfer money to")
                         }
                     }
                     
@@ -179,6 +187,8 @@ struct TransferView: View {
                             .font(.headline)
                             .foregroundColor(.white)
                             .accessibilityIdentifier("transfer.amount.label")
+                            .accessibilityLabel("Transfer amount")
+                            .accessibilityHint("Enter the amount of money to transfer")
                         
                         HStack {
                             TextField("0.00", text: $amount)
@@ -186,6 +196,8 @@ struct TransferView: View {
                                 .foregroundColor(.white)
                                 .accentColor(.white) // Set accent color for cursor/selection
                                 .accessibilityIdentifier("transfer.amount.textfield")
+                                .accessibilityLabel("Amount input field")
+                                .accessibilityHint("Enter the transfer amount in dollars and cents")
                             
                             if !amount.isEmpty && amount != "0.00" {
                                 Button(action: { amount = "0.00" }) {
@@ -193,6 +205,8 @@ struct TransferView: View {
                                         .foregroundColor(.gray)
                                 }
                                 .accessibilityIdentifier("transfer.amount.clear.button")
+                                .accessibilityLabel("Clear amount")
+                                .accessibilityHint("Tap to clear the amount field")
                             }
                         }
                         .padding(.bottom, 8)
@@ -209,6 +223,9 @@ struct TransferView: View {
                         Text("Date")
                             .font(.headline)
                             .foregroundColor(.white)
+                            .accessibilityIdentifier("transfer.date.label")
+                            .accessibilityLabel("Transfer date")
+                            .accessibilityHint("Select when to execute the transfer")
                         
                         Button(action: { showDatePicker = true }) {
                             HStack {
@@ -228,6 +245,8 @@ struct TransferView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         .accessibilityIdentifier("transfer.date.field")
+                        .accessibilityLabel("Date selection")
+                        .accessibilityHint("Tap to select the transfer date")
                     }
                     
                     // Frequency input
@@ -235,6 +254,9 @@ struct TransferView: View {
                         Text("Frequency")
                             .font(.headline)
                             .foregroundColor(.white)
+                            .accessibilityIdentifier("transfer.frequency.label")
+                            .accessibilityLabel("Transfer frequency")
+                            .accessibilityHint("Select how often to repeat this transfer")
                         
                         Button(action: { showFrequencyPicker = true }) {
                             HStack {
@@ -254,6 +276,8 @@ struct TransferView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         .accessibilityIdentifier("transfer.frequency.field")
+                        .accessibilityLabel("Frequency selection")
+                        .accessibilityHint("Tap to select the transfer frequency")
                     }
                     
                     // Statement details
@@ -261,6 +285,9 @@ struct TransferView: View {
                         Text("Statement details")
                             .font(.headline)
                             .foregroundColor(.white)
+                            .accessibilityIdentifier("transfer.statement.details.label")
+                            .accessibilityLabel("Statement details")
+                            .accessibilityHint("Add details that will appear on your bank statement")
                         
                         Button(action: { showStatementDetailsSheet = true }) {
                             HStack {
@@ -278,6 +305,8 @@ struct TransferView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         .accessibilityIdentifier("transfer.statement.details.field")
+                        .accessibilityLabel("Statement details")
+                        .accessibilityHint("Tap to add statement details for the transfer")
                     }
                     
                     Spacer()
@@ -298,6 +327,8 @@ struct TransferView: View {
                     }
                     .disabled(amount.isEmpty || amount == "0.00" || selectedFromAccount == nil || selectedToAccount == nil)
                     .accessibilityIdentifier("transfer.transfer.button")
+                    .accessibilityLabel("Transfer money")
+                    .accessibilityHint("Tap to proceed with the money transfer")
                 }
                 .padding()
             }
@@ -315,6 +346,8 @@ struct TransferView: View {
                     }
                     .foregroundColor(Color(red: 0.29, green: 0.64, blue: 0.89)) // Light blue
                     .accessibilityIdentifier("transfer.cancel.button")
+                    .accessibilityLabel("Cancel transfer")
+                    .accessibilityHint("Tap to cancel and return to previous screen")
                 }
             }
         }
@@ -370,8 +403,14 @@ struct TransferView: View {
         }
         .alert("Invalid Amount", isPresented: $showAmountError) {
             Button("OK") { }
+                .accessibilityIdentifier("transfer.amount.error.ok.button")
+                .accessibilityLabel("OK")
+                .accessibilityHint("Tap to dismiss the error message")
         } message: {
             Text(amountErrorMessage)
+                .accessibilityIdentifier("transfer.amount.error.message")
+                .accessibilityLabel("Error message")
+                .accessibilityHint("Description of the amount validation error")
         }
     }
     
@@ -418,6 +457,9 @@ struct AccountSelectionSheet: View {
                             dismiss()
                         }
                         .foregroundColor(Color(red: 0.29, green: 0.64, blue: 0.89)) // Light blue
+                        .accessibilityIdentifier("account.selection.cancel.button")
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Tap to cancel account selection and return to transfer screen")
                         
                         Spacer()
                         
@@ -566,6 +608,9 @@ struct ConfirmTransferSheet: View {
                                     }
                                     .font(.caption)
                                     .foregroundColor(Color(red: 0.13, green: 0.48, blue: 1.0)) // Bright blue
+                                    .accessibilityIdentifier("transfer.fee.learn.more.button")
+                                    .accessibilityLabel("Learn more")
+                                    .accessibilityHint("Tap to learn more about transfer fees")
                                 }
                                 
                                 Spacer()
@@ -593,6 +638,8 @@ struct ConfirmTransferSheet: View {
                                 .cornerRadius(12)
                         }
                         .accessibilityIdentifier("transfer.confirm.button")
+                        .accessibilityLabel("Confirm transfer")
+                        .accessibilityHint("Tap to confirm and execute the money transfer")
                         
                         Button("Cancel") {
                             dismiss()
@@ -600,6 +647,8 @@ struct ConfirmTransferSheet: View {
                         .foregroundColor(.white)
                         .font(.headline)
                         .accessibilityIdentifier("transfer.confirm.cancel.button")
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Tap to cancel the transfer and return to transfer screen")
                     }
                 }
                 .padding()
@@ -634,6 +683,9 @@ struct DatePickerSheet: View {
                             dismiss()
                         }
                         .foregroundColor(Color(red: 0.29, green: 0.64, blue: 0.89)) // Light blue
+                        .accessibilityIdentifier("date.picker.cancel.button")
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Tap to cancel date selection and return to transfer screen")
                         
                         Spacer()
                         
@@ -670,6 +722,8 @@ struct DatePickerSheet: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                             .accessibilityIdentifier("date.picker.option.\(option.lowercased().replacingOccurrences(of: " ", with: "."))")
+                            .accessibilityLabel("\(option)")
+                            .accessibilityHint("Tap to select \(option.lowercased()) as transfer date")
                         }
                     }
                     .padding(.horizontal)
@@ -707,6 +761,9 @@ struct FrequencyPickerSheet: View {
                             dismiss()
                         }
                         .foregroundColor(Color(red: 0.29, green: 0.64, blue: 0.89)) // Light blue
+                        .accessibilityIdentifier("frequency.picker.cancel.button")
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Tap to cancel frequency selection and return to transfer screen")
                         
                         Spacer()
                         
@@ -743,6 +800,8 @@ struct FrequencyPickerSheet: View {
                             }
                             .buttonStyle(PlainButtonStyle())
                             .accessibilityIdentifier("frequency.picker.option.\(option.lowercased().replacingOccurrences(of: " ", with: "."))")
+                            .accessibilityLabel("\(option)")
+                            .accessibilityHint("Tap to select \(option.lowercased()) as transfer frequency")
                         }
                     }
                     .padding(.horizontal)
@@ -783,6 +842,9 @@ struct StatementDetailsSheet: View {
                             dismiss()
                         }
                         .foregroundColor(Color(red: 0.29, green: 0.64, blue: 0.89)) // Light blue
+                        .accessibilityIdentifier("statement.details.cancel.button")
+                        .accessibilityLabel("Cancel")
+                        .accessibilityHint("Tap to cancel statement details and return to transfer screen")
                         
                         Spacer()
                         
@@ -796,6 +858,9 @@ struct StatementDetailsSheet: View {
                             dismiss()
                         }
                         .foregroundColor(Color(red: 0.29, green: 0.64, blue: 0.89)) // Light blue
+                        .accessibilityIdentifier("statement.details.done.button")
+                        .accessibilityLabel("Done")
+                        .accessibilityHint("Tap to save statement details and return to transfer screen")
                     }
                     .padding()
                     
@@ -825,6 +890,8 @@ struct StatementDetailsSheet: View {
                                             alignment: .bottom
                                         )
                                         .accessibilityIdentifier("statement.details.their.particulars.field")
+                                        .accessibilityLabel("Their particulars")
+                                        .accessibilityHint("Enter details that will appear on the recipient's statement")
                                 }
                                 
                                 // Their Code
@@ -843,6 +910,8 @@ struct StatementDetailsSheet: View {
                                             alignment: .bottom
                                         )
                                         .accessibilityIdentifier("statement.details.their.code.field")
+                                        .accessibilityLabel("Their code")
+                                        .accessibilityHint("Enter a code that will appear on the recipient's statement")
                                 }
                                 
                                 // Their Reference
@@ -861,6 +930,8 @@ struct StatementDetailsSheet: View {
                                             alignment: .bottom
                                         )
                                         .accessibilityIdentifier("statement.details.their.reference.field")
+                                        .accessibilityLabel("Their reference")
+                                        .accessibilityHint("Enter a reference that will appear on the recipient's statement")
                                 }
                             }
                             
@@ -887,6 +958,8 @@ struct StatementDetailsSheet: View {
                                             alignment: .bottom
                                         )
                                         .accessibilityIdentifier("statement.details.your.particulars.field")
+                                        .accessibilityLabel("Your particulars")
+                                        .accessibilityHint("Enter details that will appear on your statement")
                                 }
                                 
                                 // Your Code
@@ -905,6 +978,8 @@ struct StatementDetailsSheet: View {
                                             alignment: .bottom
                                         )
                                         .accessibilityIdentifier("statement.details.your.code.field")
+                                        .accessibilityLabel("Your code")
+                                        .accessibilityHint("Enter a code that will appear on your statement")
                                 }
                                 
                                 // Your Reference
@@ -923,6 +998,8 @@ struct StatementDetailsSheet: View {
                                             alignment: .bottom
                                         )
                                         .accessibilityIdentifier("statement.details.your.reference.field")
+                                        .accessibilityLabel("Your reference")
+                                        .accessibilityHint("Enter a reference that will appear on your statement")
                                 }
                             }
                         }

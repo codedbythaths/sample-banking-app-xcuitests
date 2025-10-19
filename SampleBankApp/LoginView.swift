@@ -65,12 +65,18 @@ struct LoginView: View {
                                     .foregroundColor(.white)
                                     .scaleEffect(showWelcomeAnimation ? 1.0 : 0.95)
                                     .animation(.spring(response: 0.6, dampingFraction: 0.8), value: showWelcomeAnimation)
+                                    .accessibilityIdentifier("login.app.title")
+                                    .accessibilityLabel("SampleBank")
+                                    .accessibilityHint("Banking application title")
                                 
                                 Text("Welcome back")
                                     .font(.system(size: 16, weight: .medium))
                                     .foregroundColor(.white.opacity(0.8))
                                     .opacity(showWelcomeAnimation ? 1.0 : 0.0)
                                     .animation(.easeInOut(duration: 0.8).delay(0.3), value: showWelcomeAnimation)
+                                    .accessibilityIdentifier("login.welcome.message")
+                                    .accessibilityLabel("Welcome back")
+                                    .accessibilityHint("Greeting message for returning users")
                             }
                             .padding(.top, 40)
                             
@@ -85,12 +91,18 @@ struct LoginView: View {
                                                 .frame(width: 12, height: 12)
                                                 .scaleEffect(index < pin.count ? 1.2 : 1.0)
                                                 .animation(.spring(response: 0.3, dampingFraction: 0.6), value: pin.count)
+                                                .accessibilityIdentifier("login.pin.dot.\(index)")
+                                                .accessibilityLabel("PIN digit \(index + 1)")
+                                                .accessibilityHint(index < pin.count ? "Digit entered" : "Digit not entered")
                                         }
                                     }
                                     
                                     Text("Enter your PIN")
                                         .font(.system(size: 16, weight: .medium))
                                         .foregroundColor(.white.opacity(0.9))
+                                        .accessibilityIdentifier("login.pin.instruction")
+                                        .accessibilityLabel("Enter your PIN")
+                                        .accessibilityHint("Instruction to enter your personal identification number")
                                 }
                                 
                                 // Keypad
@@ -117,6 +129,9 @@ struct LoginView: View {
                                         .foregroundColor(.white.opacity(0.7))
                                         .frame(maxWidth: .infinity)
                                         .frame(height: 60)
+                                        .accessibilityIdentifier("login.forgot.pin.button")
+                                        .accessibilityLabel("Forgot PIN")
+                                        .accessibilityHint("Tap to recover your forgotten PIN")
                                         
                                         KeypadButton(number: "0") {
                                             addDigit("0")
