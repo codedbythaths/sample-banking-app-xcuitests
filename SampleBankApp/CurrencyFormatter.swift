@@ -19,7 +19,12 @@ class CurrencyFormatter {
     }
     
     func format(_ amount: Double) -> String {
-        return formatter.string(from: NSNumber(value: amount)) ?? "$0.00"
+        // Handle negative amounts properly
+        let absoluteAmount = abs(amount)
+        let formatted = formatter.string(from: NSNumber(value: absoluteAmount)) ?? "$0.00"
+        
+        // Add negative sign if needed
+        return amount < 0 ? "-\(formatted)" : formatted
     }
     
     func parse(_ string: String) -> Double {

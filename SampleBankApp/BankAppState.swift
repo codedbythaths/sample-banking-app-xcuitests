@@ -338,7 +338,7 @@ class BankAppState: ObservableObject {
         guard fromAccount.id != toAccount.id else {
             errorMessage = Constants.ErrorMessages.sameAccountTransfer
             showErrorBanner = true
-            Logger.shared.error("Attempted transfer to same account")
+            Logger.shared.error("Attempted transfer to same account: \(fromAccount.name)")
             return false
         }
         

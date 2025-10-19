@@ -166,9 +166,9 @@ struct NewPayeeSheet: View {
             return
         }
         
-        
         // Add new payee
-        _ = bankState.addNewPayee(name: name, accountNumber: accountNumber)
+        let newPayee = bankState.addNewPayee(name: name, accountNumber: accountNumber)
+        Logger.shared.info("Successfully added new payee: \(newPayee.name) with account: \(newPayee.accountNumber)")
         dismiss()
     }
 }

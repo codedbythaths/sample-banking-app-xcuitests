@@ -471,6 +471,7 @@ struct PayeeSelectionRow: View {
     }
 }
 
+
 #Preview {
     PaymentView()
         .environmentObject(BankAppState())
