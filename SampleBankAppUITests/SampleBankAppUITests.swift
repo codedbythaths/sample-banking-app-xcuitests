@@ -10,39 +10,78 @@ import XCTest
 class SampleBankAppUITests: XCTestCase {
     var app: XCUIApplication!
     
+    // Test data
+    private let validPIN = "12345"
+    private let transferAmount = "100.00"
+    
     override func setUpWithError() throws {
         continueAfterFailure = false
         app = XCUIApplication()
         app.launch()
     }
     
-    override func tearDownWithError() throws{
+    override func tearDownWithError() throws {
         app = nil
     }
     
+    // Helper Methods
+    private func loginWithPIN(_ pin: String) {
+        for digit in pin {
+            let button = app.buttons["Number \(digit)"]
+            XCTAssertTrue(button.waitForExistence(timeout: 3), "Number \(digit) button should exist")
+            button.tap()
+        }
+    }
+    
+    func clearAndTypeInTextField(_ textField: XCUIElement,
+                                 text: String,
+                                 clearCharacterCount: Int = 4,
+                                 useNumbersKeyboard: Bool = true) {
+        textField.tap()
+        
+        // Clear existing text
+        for _ in 0..<clearCharacterCount {
+            app.keys["delete"].tap()
+        }
+        
+        // Switch keyboard if needed
+        if useNumbersKeyboard {
+            app.keys["more"].tap()
+        }
+        
+        // Type new text
+        for character in text {
+            app.keys[String(character)].tap()
+        }
+        
+        app.buttons["Return"].tap()
+    }
+    
+    private func waitForHomeScreen() {
+        XCTAssertTrue(app.buttons["home.add.account.button"].waitForExistence(timeout: 5),
+                      "Should navigate to home screen")
+    }
+    
+    // Tests
     func testSimpleLogin() throws {
-        // ARRANGE - Set up the test state
-        // Verify we're on the login screen
-        XCTAssertTrue(app.buttons["Number 1"].exists, "Should be in the login screen")
+        // ARRANGE
+        XCTAssertTrue(app.buttons["Number 1"].exists, "Should be on login screen")
         
-        // ACT - Enter PIN to login
-        app.buttons["Number 1"].tap()
-        app.buttons["Number 2"].tap()
-        app.buttons["Number 3"].tap()
-        app.buttons["Number 4"].tap()
-        app.buttons["Number 5"].tap()
+        // ACT
+        loginWithPIN(validPIN)
         
-        // ASSERT - Check that login was successful
-        let addAccountButton = app.buttons["home.add.account.button"]
-        XCTAssertTrue(addAccountButton.waitForExistence(timeout: 5), "Add Account button is not visible")
+        // ASSERT
+        waitForHomeScreen()
     }
     
     func testTransferMoney() throws {
-        try testSimpleLogin()
+        // ARRANGE
+        loginWithPIN(validPIN)
+        waitForHomeScreen()
         
-        // Navigate to Transfer Money
+        // ACT
         app.buttons["Menu"].tap()
-        app.buttons["Transfer money"].firstMatch.tap()
+        app.buttons["Transfer money"].tap()
         
         // Select from account
         app.staticTexts["Transfer money"].firstMatch.press(forDuration: 0.6)
@@ -53,38 +92,23 @@ class SampleBankAppUITests: XCTestCase {
         app.buttons["transfer.to.account.button"].firstMatch.tap()
         app.buttons["account.selection.row.rapid.save"].firstMatch.tap()
         
-        // Enter transfer amount
-        let amountTextField = app.textFields["transfer.amount.textfield"]
-        amountTextField.firstMatch.tap()
+        // Enter amount
+        let amountField = app.textFields["transfer.amount.textfield"]
+        amountField.tap()
+        clearAndTypeInTextField(amountField, text: transferAmount, useNumbersKeyboard: true)
         
-        // Delete existing value
-        app.keys["delete"].tap()
-        app.keys["delete"].tap()
-        app.keys["delete"].tap()
-        app.keys["delete"].tap()
+        // Configure transfer
+        app.staticTexts["Today"].tap()
+        app.buttons["date.picker.option.tomorrow"].tap()
         
-        // Switch to numbers keyboard and enter amount
-        app.keys["more"].tap()
-        app.keys["1"].tap()
-        app.keys["0"].tap()
-        app.keys["0"].tap()
-        app.keys["."].tap()
-        app.keys["0"].tap()
-        app.keys["0"].tap()
-        app.buttons["Return"].firstMatch.tap()
+        app.staticTexts["One-off"].tap()
+        app.buttons["frequency.picker.option.monthly"].tap()
         
-        // Select date and frequency
-        app.staticTexts["Today"].firstMatch.tap()
-        app.buttons["date.picker.option.tomorrow"].firstMatch.tap()
-        app.staticTexts["One-off"].firstMatch.tap()
-        app.buttons["frequency.picker.option.monthly"].firstMatch.tap()
+        // Execute transfer
+        app.buttons["transfer.transfer.button"].tap()
+        app.buttons["transfer.confirm.button"].tap()
         
-        // Perform transfer
-        app.buttons["transfer.transfer.button"].firstMatch.tap()
-        app.buttons["transfer.confirm.button"].firstMatch.tap()
-        
-        // Assert successful transfer
-        let addAccountButton = app.buttons["home.add.account.button"]
-        XCTAssertTrue(addAccountButton.waitForExistence(timeout: 5), "Add Account button is not visible")
+        // ASSERT
+        waitForHomeScreen()
     }
 }
